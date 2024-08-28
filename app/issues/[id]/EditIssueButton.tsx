@@ -1,16 +1,21 @@
+"use client";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Flex, Button } from "@radix-ui/themes";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const EditIssueButton = ({ issueId }: { issueId: number }) => {
+  const router = useRouter();
+
   return (
-    <Button>
-      <Link href={`/issues/${issueId}/edit`}>
-        <Flex gap="2" className="items-center">
-          <Pencil2Icon />
-          Edit
-        </Flex>
-      </Link>
+    <Button
+      onClick={() => {
+        router.push(`/issues/${issueId}/edit`);
+      }}
+    >
+      <Flex gap="2" className="items-center">
+        <Pencil2Icon />
+        Edit
+      </Flex>
     </Button>
   );
 };
