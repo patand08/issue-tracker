@@ -1,9 +1,9 @@
 "use client";
-import { ErrorMessage, Spinner } from "@/app/components";
+import { ErrorMessage, IssueStatusBadge, Spinner } from "@/app/components";
 import { issueSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Issue } from "@prisma/client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Flex, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
+import Select from "react-select";
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -32,6 +33,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     try {
       setIsSubmitting(true);
       if (issue) {
+        console.log(data);
         await axios.patch("/api/issues/" + issue.id, data);
       } else {
         await axios.post("/api/issues", data);
@@ -52,13 +54,25 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         </Callout.Root>
       )}
 
-      <form className="space-y-3" onSubmit={onSubmit}>
+      <form className="space-y-4" onSubmit={onSubmit}>
         <TextField.Root
           defaultValue={issue?.title}
           placeholder="Title"
           {...register("title")}
         />
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
+
+        {issue && (
+          <select
+            {...register("status")}
+            defaultValue={issue.status}
+            className="p-1 pl-2 bg-transparent border-gray-300 border rounded-md text-sm"
+          >
+            <option value="OPEN">Open</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="CLOSED">Closed</option>
+          </select>
+        )}
 
         <Controller
           name="description"

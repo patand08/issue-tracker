@@ -26,6 +26,7 @@ export async function PATCH(
     data: {
       title: body.title,
       description: body.description,
+      status: body.status,
     },
   });
 
