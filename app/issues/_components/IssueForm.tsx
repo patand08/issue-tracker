@@ -11,7 +11,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
-import Select from "react-select";
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
